@@ -998,7 +998,7 @@ async function streamAI(res){
 한국어로 plain text만 작성 (마크다운 없이).`;
 
   try{
-    const resp=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:prompt,userData:{company:D.company,phone:D.phone,email:D.email,industry:D.industry,age:D.age,region:D.region,purposes:D.purposes,specials:D.specials,soho:D.soho,marketing:D.c2===true||D.c2==='true'}})});
+    const resp=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:prompt,userData:{company:D.company,phone:D.phone,email:D.email,industry:D.industry,age:D.age,region:D.region,purposes:D.purposes,specials:D.specials,soho:D.soho,marketing:document.querySelector('.consent-chk:last-child input')?.checked||false}})});
     if(!resp.ok)throw new Error('err');
     el.innerHTML='<span class="cursor"></span>';
     let txt='';
