@@ -352,7 +352,7 @@ body{font-family:'Pretendard',-apple-system,sans-serif;background:#F0F4F8;color:
 
 <script>
 const D={
-  company:'',phone:'',email:'',c1:true,c2:false,
+  company:'',phone:'',email:'',c1:true,c2:true,
   industry:'',revenue:'',age:'',workers:'',region:'',ceo_age:'over40',
   purposes:[],export_val:'없음',
   amt_f:0,amt_w:0,
@@ -410,7 +410,7 @@ function s0(){return card(`
   <div class="info-field"><label class="info-lbl">이메일 <span class="req">*</span></label><input class="info-input" placeholder="example@company.com" value="${D.email}" oninput="D.email=this.value"></div>
   <div class="consent-box"><b>개인정보 수집·이용 안내</b><br>수집항목: 업체명, 전화번호, 이메일 / 수집목적: 정책자금 진단 결과 제공 / 보유기간: 서비스 이용 종료 후 1년 / 제3자 제공: 없음</div>
   <label class="consent-chk"><input type="checkbox" onchange="D.c1=this.checked" ${D.c1?'checked':''}><span><span class="req">[필수]</span> 개인정보 수집·이용에 동의합니다</span></label>
-  <label class="consent-chk"><input type="checkbox" id="chk-marketing" onchange="D.c2=this.checked"><span>[선택] 마케팅·서비스 안내 수신에 동의합니다</span></label>
+  <label class="consent-chk"><input type="checkbox" id="chk-marketing" onchange="D.c2=this.checked" checked><span>[선택] 마케팅·서비스 안내 수신에 동의합니다</span></label>
   <div class="q-nav"><button class="btn-next" onclick="validateAndStart()">AI 분석 시작! →</button></div>
   <div class="secure-note">🔒 입력하신 정보는 암호화되어 안전하게 보관됩니다</div>
 `);}
@@ -645,6 +645,9 @@ function togCard(el,key,val,cls='sel'){
 
 /* ══ LOADING ══ */
 async function runDiag(){
+  // 로딩 화면 전환 전 체크박스 DOM값 최종 저장
+  var mktEl=document.getElementById('chk-marketing');
+  if(mktEl) D.c2=mktEl.checked;
   goTo('scr-load');
   document.getElementById('load-bar').style.width='0%';
   const ids=['ls0','ls1','ls2','ls3','ls4'];
@@ -1025,7 +1028,7 @@ function fallback(res,company,industry,top,topAmt){
 }
 
 function resetAll(){
-  Object.assign(D,{company:'',phone:'',email:'',c1:true,c2:false,industry:'',revenue:'',age:'',workers:'',region:'',ceo_age:'over40',purposes:[],export_val:'없음',amt_f:0,amt_w:0,amt_f_uk:0,amt_f_cm:0,amt_w_uk:0,amt_w_cm:0,specials:[],bal:'없음',cnt:'없음',cum:'없음',tax:'ok',credit:'ok',listed:'no',soho:'no'});
+  Object.assign(D,{company:'',phone:'',email:'',c1:true,c2:true,industry:'',revenue:'',age:'',workers:'',region:'',ceo_age:'over40',purposes:[],export_val:'없음',amt_f:0,amt_w:0,amt_f_uk:0,amt_f_cm:0,amt_w_uk:0,amt_w_cm:0,specials:[],bal:'없음',cnt:'없음',cum:'없음',tax:'ok',credit:'ok',listed:'no',soho:'no'});
   step=0;
   goTo('scr-land');
 }
