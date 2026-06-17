@@ -1,1 +1,1031 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>정책자금 AI 진단 | 2026년 중소기업 융자 매칭</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Pretendard:wght@300;400;500;600;700;800;900&display=swap');
+:root{
+  --navy:#0D2240;--navy2:#1A3A5C;--blue:#1565C0;--blue2:#1E88E5;
+  --sky:#E8F4FD;--sky2:#BBDEFB;--accent:#FF6B2B;--accent-l:#FFF0E8;
+  --green:#00897B;--green-l:#E0F2F1;--gold:#F9A825;--gold-l:#FFF8E1;
+  --red:#C62828;--red-l:#FFEBEE;
+  --g900:#0F172A;--g700:#334155;--g500:#64748B;--g300:#CBD5E1;--g100:#F1F5F9;--g50:#F8FAFC;
+  --white:#fff;--r:14px;--r-lg:20px;
+  --sh:0 4px 24px rgba(13,34,64,0.09);--sh-lg:0 12px 48px rgba(13,34,64,0.16);
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Pretendard',-apple-system,sans-serif;background:#F0F4F8;color:var(--g900);min-height:100vh;overflow-x:hidden;}
 
+/* ── SCREEN MANAGEMENT ── */
+.screen{display:none;}
+.screen.active{display:block;}
+
+/* ════ LANDING ════ */
+#scr-land{
+  background:linear-gradient(160deg,var(--navy) 0%,#1A3A5C 50%,#1565C0 100%);
+  min-height:100vh;flex-direction:column;align-items:center;
+  justify-content:center;padding:48px 20px;text-align:center;position:relative;overflow:hidden;
+}
+#scr-land.active{display:flex;}
+#scr-land::before{content:'';position:absolute;top:-120px;right:-120px;width:400px;height:400px;background:rgba(255,255,255,0.04);border-radius:50%;}
+#scr-land::after{content:'';position:absolute;bottom:-80px;left:-80px;width:280px;height:280px;background:rgba(255,255,255,0.03);border-radius:50%;}
+.land-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.18);border-radius:24px;padding:7px 18px;font-size:13px;font-weight:600;color:rgba(255,255,255,0.9);margin-bottom:28px;position:relative;z-index:1;}
+.badge-dot{width:7px;height:7px;background:#4FC3F7;border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.6;transform:scale(1.3);}}
+#scr-land h1{font-size:clamp(30px,5vw,52px);font-weight:900;line-height:1.18;color:white;margin-bottom:16px;letter-spacing:-.5px;position:relative;z-index:1;}
+#scr-land h1 em{color:#90CAF9;font-style:normal;}
+.land-sub{font-size:16px;color:rgba(255,255,255,.65);line-height:1.7;max-width:480px;margin:0 auto 36px;position:relative;z-index:1;}
+.land-stats{display:flex;gap:32px;justify-content:center;margin-bottom:44px;flex-wrap:wrap;position:relative;z-index:1;}
+.land-stat-n{font-size:26px;font-weight:800;color:#90CAF9;display:block;}
+.land-stat-l{font-size:12px;color:rgba(255,255,255,.5);margin-top:2px;}
+.btn-cta{display:inline-flex;align-items:center;gap:10px;background:var(--accent);color:white;padding:17px 40px;border-radius:50px;font-size:17px;font-weight:700;border:none;cursor:pointer;font-family:inherit;box-shadow:0 8px 32px rgba(255,107,43,.45);transition:all .2s;position:relative;z-index:1;}
+.btn-cta:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(255,107,43,.55);}
+.btn-cta .arr{transition:transform .2s;}
+.btn-cta:hover .arr{transform:translateX(4px);}
+.land-reviews{margin-top:40px;display:flex;gap:14px;flex-wrap:wrap;justify-content:center;position:relative;z-index:1;}
+.rev-chip{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.14);border-radius:12px;padding:10px 16px;max-width:210px;text-align:left;}
+.rev-stars{color:#F9A825;font-size:11px;margin-bottom:4px;}
+.rev-txt{font-size:12px;color:rgba(255,255,255,.75);line-height:1.4;}
+.rev-author{font-size:11px;color:rgba(255,255,255,.4);margin-top:4px;}
+
+/* ════ QUIZ HEADER ════ */
+#scr-quiz{background:#F0F4F8;min-height:100vh;}
+.quiz-hdr{background:white;box-shadow:0 1px 0 var(--g300);position:sticky;top:0;z-index:50;}
+.quiz-hdr-inner{max-width:640px;margin:0 auto;padding:14px 20px;display:flex;align-items:center;gap:16px;}
+.quiz-logo{font-size:16px;font-weight:800;color:var(--navy);letter-spacing:-.3px;white-space:nowrap;}
+.quiz-logo span{color:var(--accent);}
+.prog-wrap{flex:1;height:5px;background:var(--g100);border-radius:3px;overflow:hidden;}
+.prog-fill{height:100%;background:linear-gradient(90deg,var(--blue),var(--accent));border-radius:3px;transition:width .4s ease;}
+.prog-lbl{font-size:12px;font-weight:600;color:var(--g500);white-space:nowrap;}
+.prog-lbl b{color:var(--blue);}
+.quiz-body{max-width:640px;margin:0 auto;padding:32px 20px 80px;}
+
+/* ── CARD ── */
+.q-card{background:white;border-radius:var(--r-lg);box-shadow:var(--sh);padding:32px 28px;animation:slideUp .35s ease;}
+@keyframes slideUp{from{opacity:0;transform:translateY(20px);}to{opacity:1;transform:translateY(0);}}
+.q-step-badge{display:inline-flex;align-items:center;gap:6px;background:var(--sky);color:var(--blue);font-size:12px;font-weight:700;padding:5px 12px;border-radius:20px;margin-bottom:14px;}
+.q-emoji{font-size:36px;margin-bottom:10px;display:block;}
+.q-title{font-size:22px;font-weight:800;line-height:1.3;color:var(--g900);margin-bottom:6px;}
+.q-title em{color:var(--blue);font-style:normal;}
+.q-sub{font-size:14px;color:var(--g500);margin-bottom:24px;line-height:1.6;}
+
+/* ── OPTION CARDS (업종 등) ── */
+.opt-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px;}
+.opt-grid-2{grid-template-columns:repeat(2,1fr);}
+.opt-card{
+  border:2px solid var(--g300);border-radius:var(--r);background:white;
+  padding:20px 12px;cursor:pointer;transition:border-color .1s,background .1s,box-shadow .1s;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  text-align:center;user-select:none;min-height:100px;
+}
+.opt-card:hover{border-color:var(--blue2);background:var(--sky);}
+.opt-card.sel{border-color:var(--blue);background:var(--sky);box-shadow:0 0 0 4px rgba(21,101,192,.08);}
+.opt-card.sel-acc{border-color:var(--accent);background:var(--accent-l);box-shadow:0 0 0 4px rgba(255,107,43,.08);}
+.opt-icon{font-size:28px;margin-bottom:8px;display:block;line-height:1;}
+.opt-label{font-size:13px;font-weight:600;color:var(--g700);line-height:1.3;}
+.opt-sub{font-size:11px;color:var(--g500);margin-top:3px;}
+.opt-card.sel .opt-label{color:var(--blue);}
+.opt-card.sel-acc .opt-label{color:var(--accent);}
+
+/* ── CHIP PILLS ── */
+.chip-row{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{padding:10px 18px;border-radius:50px;border:2px solid var(--g300);background:white;font-size:13px;font-weight:600;color:var(--g700);cursor:pointer;transition:border-color .1s,background .1s,color .1s;user-select:none;}
+.chip:hover{border-color:var(--blue2);color:var(--blue);background:var(--sky);}
+.chip.sel{border-color:var(--blue);background:var(--blue);color:white;}
+
+/* ── INPUTS ── */
+.info-field{margin-bottom:16px;}
+.info-lbl{font-size:13px;font-weight:600;color:var(--g700);margin-bottom:6px;display:block;}
+.info-lbl .req{color:var(--accent);}
+.info-input{width:100%;padding:12px 16px;border:2px solid var(--g300);border-radius:10px;font-size:15px;font-family:inherit;color:var(--g900);outline:none;transition:border-color .15s;}
+.info-input:focus{border-color:var(--blue);}
+.info-select{width:100%;padding:12px 40px 12px 16px;border:2px solid var(--g300);border-radius:10px;font-size:14px;font-family:inherit;color:var(--g900);background:white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='none' stroke='%2364748B' stroke-width='2'%3E%3Cpath d='m4 6 4 4 4-4'/%3E%3C/svg%3E") no-repeat right 14px center;appearance:none;outline:none;transition:border-color .15s;cursor:pointer;}
+.info-select:focus{border-color:var(--blue);}
+.amt-row{display:flex;align-items:center;gap:8px;}
+.amt-input{flex:1;padding:12px 16px;border:2px solid var(--g300);border-radius:10px;font-size:18px;font-weight:700;font-family:inherit;color:var(--g900);outline:none;transition:border-color .15s;}
+.amt-input:focus{border-color:var(--blue);}
+.amt-unit{font-size:15px;font-weight:600;color:var(--g500);}
+.consent-box{background:var(--g50);border-radius:10px;border:1px solid var(--g300);padding:14px;margin-bottom:14px;font-size:12px;color:var(--g500);line-height:1.7;max-height:110px;overflow-y:auto;}
+.consent-chk{display:flex;align-items:center;gap:10px;cursor:pointer;padding:9px 0;border-bottom:1px solid var(--g100);}
+.consent-chk:last-child{border-bottom:none;}
+.consent-chk input{width:18px;height:18px;accent-color:var(--blue);cursor:pointer;}
+.consent-chk span{font-size:13px;color:var(--g700);}
+.consent-chk .req{color:var(--accent);font-weight:600;}
+.multi-hint{font-size:12px;color:var(--g500);margin-bottom:12px;}
+.multi-hint b{color:var(--blue);}
+
+/* ── NAV BTNS ── */
+.q-nav{display:flex;gap:12px;margin-top:28px;}
+.btn-next{flex:1;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--navy);color:white;padding:15px 24px;border-radius:12px;font-size:15px;font-weight:700;border:none;cursor:pointer;font-family:inherit;transition:all .15s;}
+.btn-next:hover{background:var(--blue);}
+.btn-next:disabled{background:var(--g300);cursor:not-allowed;}
+.btn-back{padding:15px 20px;border-radius:12px;background:white;color:var(--g500);border:2px solid var(--g300);font-size:15px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s;}
+.btn-back:hover{border-color:var(--g500);color:var(--g700);}
+.secure-note{text-align:center;font-size:11px;color:var(--g500);margin-top:12px;}
+
+/* ════ LOADING ════ */
+#scr-load{
+  background:var(--navy);
+  padding:48px 20px;text-align:center;
+}
+#scr-load.active{
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  min-height:100vh;
+}
+.load-bot{font-size:56px;margin-bottom:24px;animation:bounce 1.5s infinite;}
+@keyframes bounce{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+.load-title{font-size:22px;font-weight:800;color:white;margin-bottom:8px;}
+.load-sub{font-size:14px;color:rgba(255,255,255,.6);margin-bottom:40px;line-height:1.6;}
+.load-steps{width:100%;max-width:420px;margin-bottom:36px;}
+.ls{display:flex;align-items:center;gap:14px;padding:12px 16px;border-radius:10px;margin-bottom:6px;transition:all .3s;}
+.ls.wait{background:rgba(255,255,255,.05);}
+.ls.run{background:rgba(30,136,229,.15);border:1px solid rgba(30,136,229,.3);}
+.ls.done{background:rgba(0,137,123,.15);border:1px solid rgba(0,137,123,.2);}
+.ls-icon{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:15px;}
+.ls.wait .ls-icon{background:rgba(255,255,255,.06);}
+.ls.run .ls-icon{background:rgba(30,136,229,.25);}
+.ls.done .ls-icon{background:rgba(0,137,123,.25);}
+.ls-txt{text-align:left;flex:1;}
+.ls-title{font-size:13px;font-weight:600;color:rgba(255,255,255,.9);}
+.ls-sub{font-size:11px;color:rgba(255,255,255,.45);margin-top:1px;}
+.ls-badge{font-size:11px;font-weight:600;padding:2px 8px;border-radius:5px;}
+.ls.wait .ls-badge{background:rgba(255,255,255,.06);color:rgba(255,255,255,.3);}
+.ls.run .ls-badge{background:rgba(30,136,229,.3);color:#90CAF9;}
+.ls.done .ls-badge{background:rgba(0,137,123,.3);color:#80CBC4;}
+.load-bar-wrap{width:100%;max-width:420px;height:5px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden;}
+.load-bar{height:100%;background:linear-gradient(90deg,var(--blue),var(--accent));border-radius:3px;transition:width .5s ease;width:0%;}
+
+/* ════ RESULT ════ */
+#scr-result{background:#F0F4F8;min-height:100vh;}
+.r-hdr{background:linear-gradient(135deg,var(--navy) 0%,var(--navy2) 60%,var(--blue) 100%);padding:40px 20px 32px;text-align:center;color:white;position:relative;overflow:hidden;}
+.r-hdr::before{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;background:rgba(255,255,255,.04);border-radius:50%;}
+.r-hdr-in{max-width:700px;margin:0 auto;position:relative;z-index:1;}
+.r-hdr h2{font-size:clamp(20px,3.5vw,28px);font-weight:800;margin-bottom:6px;}
+.r-hdr p{font-size:14px;color:rgba(255,255,255,.65);}
+.r-kpi-row{display:flex;gap:12px;margin-top:24px;justify-content:center;flex-wrap:wrap;}
+.r-kpi{background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.15);border-radius:12px;padding:14px 20px;min-width:130px;text-align:center;}
+.r-kpi-n{font-size:22px;font-weight:800;color:#90CAF9;}
+.r-kpi-l{font-size:11px;color:rgba(255,255,255,.55);margin-top:2px;}
+.r-body{max-width:720px;margin:0 auto;padding:28px 20px 40px;}
+
+/* AI Summary */
+.ai-card{background:white;border-radius:var(--r-lg);box-shadow:var(--sh);padding:24px;margin-bottom:20px;border-left:4px solid var(--blue);}
+.ai-lbl{font-size:11px;font-weight:700;color:var(--blue);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
+.ai-lbl::before{content:'🤖';}
+.ai-txt{font-size:14px;color:var(--g700);line-height:1.8;}
+.cursor{display:inline-block;width:2px;height:1em;background:var(--blue);margin-left:2px;animation:blink .8s infinite;vertical-align:text-bottom;}
+@keyframes blink{0%,100%{opacity:1;}50%{opacity:0;}}
+
+/* Fund cards */
+.sec-title{font-size:16px;font-weight:800;color:var(--g900);margin:24px 0 14px;display:flex;align-items:center;gap:8px;}
+.r-fund{background:white;border-radius:var(--r-lg);box-shadow:var(--sh);margin-bottom:14px;overflow:hidden;border:1px solid rgba(0,0,0,.04);transition:box-shadow .2s,transform .2s;}
+.r-fund:hover{box-shadow:var(--sh-lg);transform:translateY(-2px);}
+.r-fund-top{padding:18px 20px 14px;display:flex;gap:14px;align-items:flex-start;border-bottom:1px solid var(--g100);}
+.r-rank{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;flex-shrink:0;}
+.rk-g{background:linear-gradient(135deg,#F9A825,#F57F17);color:white;}
+.rk-s{background:linear-gradient(135deg,#90A4AE,#546E7A);color:white;}
+.rk-b{background:linear-gradient(135deg,#A1887F,#6D4C41);color:white;}
+.r-fund-info{flex:1;}
+.r-cat{font-size:11px;font-weight:700;color:var(--blue);background:var(--sky);padding:2px 8px;border-radius:5px;display:inline-block;margin-bottom:6px;}
+.r-name{font-size:16px;font-weight:800;color:var(--g900);margin-bottom:3px;}
+.r-desc{font-size:12px;color:var(--g500);line-height:1.4;}
+.r-amt-box{text-align:right;flex-shrink:0;}
+.r-amt-n{font-size:20px;font-weight:800;color:var(--accent);}
+.r-amt-l{font-size:11px;color:var(--g500);margin-top:2px;}
+.r-fund-body{padding:14px 20px 16px;}
+.r-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:12px;}
+.r-il{font-size:10px;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:.5px;margin-bottom:3px;}
+.r-iv{font-size:13px;font-weight:700;color:var(--g900);}
+.r-iv.blue{color:var(--blue);}
+.r-tags{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:12px;}
+.r-tag{font-size:11px;font-weight:600;padding:3px 9px;border-radius:5px;}
+.t-b{background:var(--sky2);color:var(--navy2);}
+.t-g{background:var(--green-l);color:var(--green);}
+.t-o{background:var(--accent-l);color:var(--accent);}
+.r-why{background:var(--g50);border-radius:8px;padding:10px 12px;margin-bottom:10px;}
+.r-why-l{font-size:11px;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.r-why ul{list-style:none;}
+.r-why li{font-size:12px;color:var(--g700);padding:2px 0 2px 14px;position:relative;line-height:1.5;}
+.r-why li::before{content:'✓';position:absolute;left:0;color:var(--green);font-size:10px;font-weight:700;top:3px;}
+.r-caution{background:var(--gold-l);border-radius:8px;padding:10px 12px;font-size:12px;color:#5D4037;line-height:1.6;margin-bottom:12px;}
+.r-actions{display:flex;gap:8px;flex-wrap:wrap;}
+.r-apply{display:inline-flex;align-items:center;gap:5px;padding:9px 16px;background:var(--navy);color:white;border-radius:8px;font-size:12px;font-weight:700;text-decoration:none;transition:background .15s;}
+.r-apply:hover{background:var(--blue);}
+.r-toggle{padding:9px 14px;background:var(--g50);border:1px solid var(--g300);border-radius:8px;font-size:12px;font-weight:600;color:var(--g500);cursor:pointer;font-family:inherit;transition:all .15s;}
+.r-toggle:hover{background:var(--sky);color:var(--blue);border-color:var(--blue2);}
+.fund-detail{display:none;border-top:1px solid var(--g100);padding:14px 20px;background:var(--g50);}
+.fund-detail.open{display:block;}
+.fd-title{font-size:12px;font-weight:700;color:var(--g500);text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;}
+.fd-txt{font-size:13px;color:var(--g700);line-height:1.8;white-space:pre-wrap;}
+
+/* Warn */
+.warn-card{background:var(--red-l);border:1.5px solid #FFCDD2;border-radius:var(--r);padding:18px 20px;margin-bottom:20px;}
+.warn-card h3{color:var(--red);font-size:15px;font-weight:700;margin-bottom:6px;}
+.warn-card p{font-size:13px;color:#B71C1C;line-height:1.7;}
+.notice{background:white;border-radius:var(--r);box-shadow:var(--sh);padding:18px 20px;margin-bottom:20px;font-size:13px;color:var(--g500);line-height:1.8;}
+.notice b{color:var(--g700);}
+.notice a{color:var(--blue);text-decoration:none;}
+
+/* CTA bottom */
+.cta-bottom{background:linear-gradient(135deg,var(--navy) 0%,var(--blue) 100%);border-radius:var(--r-lg);padding:28px 24px;text-align:center;margin-bottom:24px;}
+.cta-bottom h3{color:white;font-size:18px;font-weight:800;margin-bottom:6px;}
+.cta-bottom p{color:rgba(255,255,255,.7);font-size:13px;margin-bottom:20px;line-height:1.6;}
+.cta-btns{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;}
+.cta-btn-primary{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;background:var(--accent);color:white;border-radius:10px;font-size:14px;font-weight:700;text-decoration:none;border:none;cursor:pointer;font-family:inherit;transition:all .15s;}
+.cta-btn-primary:hover{background:#e05a1a;transform:translateY(-1px);}
+.cta-btn-secondary{display:inline-flex;align-items:center;gap:8px;padding:13px 24px;background:rgba(255,255,255,.12);color:white;border-radius:10px;font-size:14px;font-weight:600;border:1.5px solid rgba(255,255,255,.25);cursor:pointer;font-family:inherit;transition:all .15s;text-decoration:none;}
+.cta-btn-secondary:hover{background:rgba(255,255,255,.2);}
+
+.reset-area{text-align:center;margin-top:16px;margin-bottom:32px;}
+.btn-reset{display:inline-flex;align-items:center;gap:8px;padding:12px 24px;background:white;color:var(--g700);border:2px solid var(--g300);border-radius:12px;font-size:14px;font-weight:600;cursor:pointer;font-family:inherit;transition:all .15s;}
+.btn-reset:hover{border-color:var(--blue);color:var(--blue);}
+
+@media(max-width:600px){
+  .land-stats{gap:20px;}
+  .opt-grid{grid-template-columns:repeat(2,1fr);}
+  .quiz-body{padding:20px 14px 80px;}
+  .q-card{padding:24px 18px;}
+  .r-body{padding:20px 14px 40px;}
+  .r-grid{grid-template-columns:repeat(2,1fr);}
+}
+
+/* ── AMOUNT SELECTOR (틱 버튼) ── */
+.amt-slider-wrap{margin:8px 0 20px;}
+.amt-slider-title{font-size:13px;font-weight:600;color:var(--g700);margin-bottom:10px;display:block;}
+.amt-tick-row{display:flex;flex-wrap:wrap;gap:8px;}
+.amt-tick-btn{
+  padding:9px 14px;border-radius:8px;border:2px solid var(--g300);
+  background:white;font-size:13px;font-weight:600;color:var(--g700);
+  cursor:pointer;transition:all .15s;user-select:none;
+}
+.amt-tick-btn:hover{border-color:var(--blue2);color:var(--blue);background:var(--sky);}
+.amt-tick-btn.sel{border-color:var(--blue);background:var(--blue);color:white;}
+.amt-tick-btn.sel.over{border-color:var(--accent);background:var(--accent);}
+</style>
+</head>
+<body>
+
+<!-- ══ LANDING ══ -->
+<div id="scr-land" class="screen active">
+  <div class="land-badge"><span class="badge-dot"></span>2026년도 중소벤처기업부 공고문 기반 · AI 실시간 분석</div>
+  <h1>우리 기업에 딱 맞는<br><em>정책자금 융자</em> 찾기</h1>
+  <p class="land-sub">5분이면 충분합니다. 몇 가지 질문에 답하면<br>AI가 최적 융자 상품과 <b style="color:rgba(255,255,255,.85)">기업별 실제 수령 가능 한도</b>를 바로 알려드립니다.</p>
+  <div class="land-stats">
+    <div><span class="land-stat-n">141조 2,313억</span><span class="land-stat-l">2026년 융자·보증 규모</span></div>
+    <div><span class="land-stat-n">기업당 최대 70억</span><span class="land-stat-l">운전자금 및 시설자금</span></div>
+    <div><span class="land-stat-n">정부기관</span><span class="land-stat-l">중진공·소진공·기보·신보·신용보증재단</span></div>
+  </div>
+  <button class="btn-cta" onclick="startQuiz()">🔍 무료 AI 진단 시작하기 <span class="arr">→</span></button>
+  <div class="land-reviews">
+    <div class="rev-chip"><div class="rev-stars">★★★★★</div><div class="rev-txt">"처음 신청인데 3억 시설자금 바로 됐어요"</div><div class="rev-author">제조업 대표 · 경기 안산</div></div>
+    <div class="rev-chip"><div class="rev-stars">★★★★★</div><div class="rev-txt">"업력 2년인데 청년창업자금 연결해줘서 1억 받았습니다"</div><div class="rev-author">IT 스타트업 대표 · 서울</div></div>
+    <div class="rev-chip"><div class="rev-stars">★★★★★</div><div class="rev-txt">"어떤 자금 신청해야 할지 막막했는데 딱 알려줬어요"</div><div class="rev-author">소상공인 · 부산</div></div>
+  </div>
+</div>
+
+<!-- ══ QUIZ ══ -->
+<div id="scr-quiz" class="screen">
+  <div class="quiz-hdr">
+    <div class="quiz-hdr-inner">
+      <div class="quiz-logo">정책자금<span>AI</span></div>
+      <div class="prog-wrap"><div class="prog-fill" id="prog-fill"></div></div>
+      <div class="prog-lbl">단계 <b id="prog-num">1</b> / 8</div>
+    </div>
+  </div>
+  <div class="quiz-body"><div id="quiz-content"></div></div>
+</div>
+
+<!-- ══ LOADING ══ -->
+<div id="scr-load" class="screen">
+  <div class="load-bot">🤖</div>
+  <div class="load-title">AI가 열심히 분석하고 있어요</div>
+  <div class="load-sub">2026년 공고문 전체를 기반으로<br>우리 기업에 딱 맞는 자금을 찾는 중입니다</div>
+  <div class="load-steps" id="load-steps">
+    <div class="ls wait" id="ls0"><div class="ls-icon">📋</div><div class="ls-txt"><div class="ls-title">기업 정보 분석 중</div><div class="ls-sub">업종·업력·규모·소재지 데이터 처리</div></div><div class="ls-badge">대기</div></div>
+    <div class="ls wait" id="ls1"><div class="ls-icon">🔍</div><div class="ls-txt"><div class="ls-title">지원사업 DB 매칭</div><div class="ls-sub">2026년 공고문 전체 검색</div></div><div class="ls-badge">대기</div></div>
+    <div class="ls wait" id="ls2"><div class="ls-icon">⚖️</div><div class="ls-txt"><div class="ls-title">제한·우대 요건 검토</div><div class="ls-sub">융자제한기업 필터링 및 우대조건 적용</div></div><div class="ls-badge">대기</div></div>
+    <div class="ls wait" id="ls3"><div class="ls-icon">💰</div><div class="ls-txt"><div class="ls-title">기업별 한도 계산</div><div class="ls-sub">잔액·누적·소재지 기반 실수령 한도 산출</div></div><div class="ls-badge">대기</div></div>
+    <div class="ls wait" id="ls4"><div class="ls-icon">📊</div><div class="ls-txt"><div class="ls-title">AI 분석 리포트 작성</div><div class="ls-sub">최종 추천 및 전략 코멘트 생성</div></div><div class="ls-badge">대기</div></div>
+  </div>
+  <div class="load-bar-wrap"><div class="load-bar" id="load-bar"></div></div>
+</div>
+
+<!-- ══ RESULT ══ -->
+<div id="scr-result" class="screen">
+  <div class="r-hdr">
+    <div class="r-hdr-in">
+      
+      <h2 id="r-title">귀사 맞춤 정책자금 진단 결과</h2>
+      <p id="r-subtitle">아래 추천 자금을 확인하세요</p>
+      <div class="r-kpi-row" id="r-kpis"></div>
+    </div>
+  </div>
+  <div class="r-body">
+    <div id="r-warn"></div>
+    <div class="ai-card">
+      <div class="ai-lbl">AI 종합 진단 코멘트</div>
+      <div class="ai-txt" id="ai-txt"></div>
+    </div>
+    <div class="sec-title">추천 융자 상품</div>
+    <div id="r-funds"></div>
+    <div class="notice">
+      <b>📌 공통 유의사항</b><br>
+      • 표시 한도는 <b>공고문 기준 1개 기업의 최대 수령 가능 한도</b>이며, 실제 대출액은 기업 신용등급·담보·심사 결과에 따라 달라집니다.<br>
+      • 정책자금 기준금리는 분기별 변동 (2025년 4분기: 연 2.71%).<br>
+      • 기업당 중진공 정책자금 잔액+신규 합산 <b>60억 이내</b> (지방 70억) 원칙.<br>
+      • 신청: 중진공 <a href="https://www.kosmes.or.kr" target="_blank">kosmes.or.kr</a> · 소진공 <a href="https://ols.semas.or.kr" target="_blank">ols.semas.or.kr</a> · 기보 <a href="https://www.kibo.or.kr" target="_blank">kibo.or.kr</a> · 신보 <a href="https://www.kodit.or.kr" target="_blank">kodit.or.kr</a> · ☎ 1811-3655
+    </div>
+    <div class="cta-bottom">
+      <h3>💬 전문가 상담이 필요하신가요?</h3>
+      <p>정책자금 신청 전략부터 사업계획서 작성까지<br>전문 컨설턴트가 1:1로 도와드립니다</p>
+      <div class="cta-btns">
+        <a href="http://pf.kakao.com/_fBxkWn/chat" target="_blank" class="cta-btn-primary" style="background:#FEE500;color:#3A1D1D;font-weight:800;">💬 카카오톡 문의하기</a>
+      </div>
+    </div>
+    <div class="reset-area"><button class="btn-reset" onclick="resetAll()">↺ 처음부터 다시 진단하기</button></div>
+  </div>
+</div>
+
+<script>
+const D={
+  company:'',phone:'',email:'',c1:true,c2:true,
+  industry:'',revenue:'',age:'',workers:'',region:'',ceo_age:'over40',
+  purposes:[],export_val:'없음',
+  amt_f:0,amt_w:0,
+  specials:[],
+  bal:'없음',cnt:'없음',cum:'없음',
+  tax:'ok',credit:'ok',listed:'no',soho:'no',
+  amt_f_uk:0,amt_f_cm:0,amt_w_uk:0,amt_w_cm:0
+};
+let step=0;
+const TOTAL=8;
+
+function goTo(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0,0);
+}
+
+function startQuiz(){
+  step=0;
+  goTo('scr-quiz');
+  render();
+}
+
+function updProg(){
+  document.getElementById('prog-fill').style.width=((step+1)/TOTAL*100)+'%';
+  document.getElementById('prog-num').textContent=step+1;
+}
+
+function render(){
+  updProg();
+  const c=document.getElementById('quiz-content');
+  c.innerHTML='';
+  c.appendChild([s1,s2,s3,s4,s5,s6,s7,s0][step]());
+}
+
+function nav(d){
+  step+=d;
+  if(step<0)step=0;
+  if(step>=TOTAL){runDiag();return;}
+  render();
+  window.scrollTo(0,0);
+}
+
+function card(h){const d=document.createElement('div');d.className='q-card';d.innerHTML=h;return d;}
+function badge(t){return `<div class="q-step-badge">${t}</div>`;}
+
+/* ── S0: 기본정보 ── */
+function s0(){return card(`
+  ${badge('8단계 / 8 &nbsp;기본 정보')}
+  <span class="q-emoji">👋</span>
+  <div class="q-title">먼저 간단한 정보를<br>알려주세요</div>
+  <div class="q-sub">진단 결과 안내와 서비스 개선 목적으로만 사용됩니다</div>
+  <div class="info-field"><label class="info-lbl">업체명 <span class="req">*</span></label><input class="info-input" placeholder="예: (주)테크스타트" value="${D.company}" oninput="D.company=this.value"></div>
+  <div class="info-field"><label class="info-lbl">전화번호</label><input class="info-input" placeholder="010-0000-0000" value="${D.phone}" oninput="D.phone=this.value"></div>
+  <div class="info-field"><label class="info-lbl">이메일 <span class="req">*</span></label><input class="info-input" placeholder="example@company.com" value="${D.email}" oninput="D.email=this.value"></div>
+  <div class="consent-box"><b>개인정보 수집·이용 안내</b><br>수집항목: 업체명, 전화번호, 이메일 / 수집목적: 정책자금 진단 결과 제공 / 보유기간: 서비스 이용 종료 후 1년 / 제3자 제공: 없음</div>
+  <label class="consent-chk"><input type="checkbox" onchange="D.c1=this.checked" ${D.c1?'checked':''}><span><span class="req">[필수]</span> 개인정보 수집·이용에 동의합니다</span></label>
+  <label class="consent-chk"><input type="checkbox" onchange="D.c2=this.checked" ${D.c2?'checked':''}><span>[선택] 마케팅·서비스 안내 수신에 동의합니다</span></label>
+  <div class="q-nav"><button class="btn-next" onclick="validateAndStart()">AI 분석 시작! →</button></div>
+  <div class="secure-note">🔒 입력하신 정보는 암호화되어 안전하게 보관됩니다</div>
+`);}
+
+/* ── S1: 업종 ── */
+function s1(){
+  const opts=[
+    {v:'manufacture',i:'🏭',l:'제조업 · 공장',s:'생산·가공·조립·금속'},
+    {v:'ict',i:'💻',l:'IT · 앱 · 소프트웨어',s:'개발사·스타트업·SaaS'},
+    {v:'bio',i:'🧬',l:'바이오 · 헬스케어',s:'의료기기·제약·생명공학'},
+    {v:'greentech',i:'🌿',l:'그린 · 친환경 · 에너지',s:'신재생에너지·탄소중립'},
+    {v:'knowledge',i:'📐',l:'지식서비스업',s:'디자인·컨설팅·연구'},
+    {v:'sohoretail',i:'🏪',l:'소매 · 음식 · 서비스',s:'카페·식당·미용·학원'},
+    {v:'export_trade',i:'🌍',l:'수출 · 무역',s:'해외영업·무역대리'},
+    {v:'other',i:'📦',l:'기타 업종',s:'위에 해당 없는 업종'},
+  ];
+  const html=opts.map(o=>`<div class="opt-card ${D.industry===o.v?'sel':''}" data-key="industry" onclick="pick(this,'industry','${o.v}')">
+    <span class="opt-icon">${o.i}</span>
+    <div class="opt-label">${o.l}</div>
+    <div class="opt-sub">${o.s}</div>
+  </div>`).join('');
+  return card(`
+    ${badge('1단계 / 8 &nbsp;업종 선택')}
+    <span class="q-emoji">🏪</span>
+    <div class="q-title">어떤 사업을 <em>운영</em>하고 계세요?</div>
+    <div class="q-sub">정확하게 선택할수록 더 많은 자금을 찾을 수 있어요</div>
+    <div class="opt-grid">${html}</div>
+    <div class="q-nav"><button class="btn-next" onclick="if(!D.industry){alert('업종을 선택해 주세요.');return;}nav(1)">다음으로 →</button></div>
+  `);}
+
+/* ── S2: 규모 & 현황 ── */
+function s2(){
+  const revs=['매출없음','1억 미만','1억~5억','5억~30억','30억~100억','100억 초과'];
+  const ages=['1년 미만','1년~3년','3년~7년','7년~15년','15년 이상'];
+  const wks=['나 혼자(1인)','2~4명','5~9명','10~49명','50명 이상'];
+  const regs=['서울','경기도','인천','부산','대구','광주','대전','울산','세종','강원도','경상남도','경상북도','전라남도','전라북도','충청남도','충청북도','제주도'];
+  return card(`
+    ${badge('2단계 / 8 &nbsp;규모 & 현황')}
+    <span class="q-emoji">💰</span>
+    <div class="q-title">사업 현황을 <em>알려주세요</em></div>
+    <div class="q-sub">대략적이어도 괜찮아요. 솔직하게 입력할수록 더 정확해요</div>
+    <div class="info-field"><label class="info-lbl">연간 매출액 (직전 결산 기준)</label><div class="chip-row">${revs.map(v=>`<div class="chip ${D.revenue===v?'sel':''}" data-key="revenue" onclick="pick(this,'revenue','${v}')">${v}</div>`).join('')}</div></div>
+    <div class="info-field"><label class="info-lbl">업력 (사업개시일 기준) <span class="req">*</span></label><div class="chip-row">${ages.map(v=>`<div class="chip ${D.age===v?'sel':''}" data-key="age" onclick="pick(this,'age','${v}')">${v}</div>`).join('')}</div></div>
+    <div class="info-field"><label class="info-lbl">상시 근로자 수</label><div class="chip-row">${wks.map(v=>`<div class="chip ${D.workers===v?'sel':''}" data-key="workers" onclick="pick(this,'workers','${v}')">${v}</div>`).join('')}</div></div>
+    <div class="info-field"><label class="info-lbl">사업장 소재지 <span class="req">*</span></label><select class="info-select" onchange="D.region=this.value"><option value="">지역 선택</option>${regs.map(r=>`<option value="${r}" ${D.region===r?'selected':''}>${r}</option>`).join('')}</select></div>
+    <div class="info-field"><label class="info-lbl">대표자 연령</label><div class="chip-row"><div class="chip ${D.ceo_age==='under39'?'sel':''}" data-key="ceo_age" onclick="pick(this,'ceo_age','under39')">만 39세 이하</div><div class="chip ${D.ceo_age==='over40'?'sel':''}" data-key="ceo_age" onclick="pick(this,'ceo_age','over40')">만 40세 이상</div></div></div>
+    <div class="q-nav"><button class="btn-back" onclick="nav(-1)">← 이전</button><button class="btn-next" onclick="if(!D.age||!D.region){alert('업력과 지역을 선택해 주세요.');return;}nav(1)">다음으로 →</button></div>
+  `);}
+
+/* ── S3: 자금 목적 ── */
+function s3(){
+  const opts=[
+    {v:'facility',i:'🏭',l:'시설자금 (기계·설비 구입)'},
+    {v:'land_build',i:'🏗️',l:'시설자금 (토지·건축)'},
+    {v:'working',i:'💼',l:'운전자금 (원자재·인건비)'},
+    {v:'export_mkt',i:'🌍',l:'수출·해외 진출'},
+    {v:'smart',i:'🤖',l:'스마트공장·자동화'},
+    {v:'green',i:'🌿',l:'친환경·탄소중립'},
+    {v:'emergency',i:'🚨',l:'경영위기·긴급자금'},
+    {v:'recover',i:'🔄',l:'사업전환·재창업'},
+  ];
+  return card(`
+    ${badge('3단계 / 8 &nbsp;자금 목적')}
+    <span class="q-emoji">🎯</span>
+    <div class="q-title">지금 <em>가장 필요한 게</em> 뭐예요?</div>
+    <div class="q-sub">여러 개 골라도 됩니다</div>
+    <div class="multi-hint" id="multi-hint-purposes">현재 <b>${D.purposes.length}개</b> 선택됨</div>
+    <div class="opt-grid opt-grid-2">${opts.map(o=>{const s=D.purposes.includes(o.v);return`<div class="opt-card ${s?'sel-acc':''}" onclick="togCard(this,'purposes','${o.v}','sel-acc')"><span class="opt-icon">${o.i}</span><div class="opt-label">${o.l}</div></div>`;}).join('')}</div>
+    <div class="q-nav"><button class="btn-back" onclick="nav(-1)">← 이전</button><button class="btn-next" onclick="if(!D.purposes.length){alert('자금 목적을 하나 이상 선택해 주세요.');return;}nav(1)">다음으로 →</button></div>
+  `);}
+
+/* ── S4: 필요 금액 ── */
+function s4(){
+  const hasFacility=D.purposes.includes('facility')||D.purposes.includes('land_build');
+  const hasWorking=D.purposes.includes('working')||D.purposes.includes('export_mkt')||D.purposes.includes('emergency')||D.purposes.includes('recover');
+  const exps=['없음','10만달러 미만','10만~100만달러','100만달러 이상'];
+
+  // 틱: [표시라벨, 억단위값]
+  const TICKS=[
+    ['없음',0],['5천만',0.5],['1억',1],['1억5천',1.5],['2억',2],
+    ['3억',3],['4억',4],['5억 초과',999]
+  ];
+
+  function tickBtns(key, curVal){
+    return TICKS.map(([lbl,v])=>{
+      const isSel = curVal===v;
+      const isOver = v===999;
+      const cls = isSel ? (isOver ? 'amt-tick-btn sel over' : 'amt-tick-btn sel') : 'amt-tick-btn';
+      return '<button class="'+cls+'" onclick="pickAmt(this,\''+key+'\','+v+')">'+lbl+'</button>';
+    }).join('');
+  }
+
+  return card(`
+    ${badge('4단계 / 8 &nbsp;필요 금액')}
+    <span class="q-emoji">💵</span>
+    <div class="q-title">얼마나 <em>필요하신가요?</em></div>
+    <div class="q-sub">해당 금액 버튼을 선택해 주세요. 없으면 "없음"을 선택하세요.</div>
+
+    ${hasFacility?`
+    <div class="amt-slider-wrap">
+      <span class="amt-slider-title">🏭 시설자금 필요액</span>
+      <div class="amt-tick-row">${tickBtns('amt_f', D.amt_f)}</div>
+    </div>`:''}
+
+    ${hasWorking?`
+    <div class="amt-slider-wrap">
+      <span class="amt-slider-title">💼 운전자금 필요액</span>
+      <div class="amt-tick-row">${tickBtns('amt_w', D.amt_w)}</div>
+    </div>`:''}
+
+    <div class="info-field" style="margin-top:4px;">
+      <label class="info-lbl">수출 실적 (최근 12개월)</label>
+      <div class="chip-row">${exps.map(v=>`<div class="chip ${D.export_val===v?'sel':''}" data-key="export_val" onclick="pick(this,'export_val','${v}')">${v}</div>`).join('')}</div>
+    </div>
+    <div class="q-nav"><button class="btn-back" onclick="nav(-1)">← 이전</button><button class="btn-next" onclick="nav(1)">다음으로 →</button></div>
+  `);
+}
+
+/* ── S5: 우대 조건 ── */
+function s5(){
+  const opts=[
+    {v:'disaster',i:'🆘',l:'재해(자연재난·사회재난) 피해'},
+    {v:'trade_barrier',i:'🚧',l:'보호무역·환율 피해'},
+    {v:'partner_bankrupt',i:'💥',l:'주요 거래처 도산'},
+    {v:'material_price',i:'📈',l:'원자재 가격급등 피해'},
+    {v:'restructure',i:'🔧',l:'사업전환 계획 승인기업'},
+    {v:'refound',i:'🌱',l:'재창업 기업'},
+    {v:'venture',i:'🦄',l:'벤처·이노비즈 인증'},
+    {v:'patent',i:'💡',l:'특허·실용신안 보유'},
+    {v:'gov_rd',i:'🔬',l:'정부 R&D 완료'},
+    {v:'smart_factory',i:'🏭',l:'스마트공장 지원사업 참여'},
+    {v:'green_cert',i:'🌿',l:'녹색기술 인증·친환경 전환'},
+    {v:'unicorn',i:'🚀',l:'아기유니콘·예비유니콘'},
+    {v:'hire10',i:'👥',l:'1년 10인 이상 고용창출'},
+    {v:'export_grow',i:'📦',l:'수출 20%↑ (50만달러 이상)'},
+    {v:'revenue_grow',i:'📊',l:'매출 3년 연평균 20%↑'},
+    {v:'female',i:'👩',l:'여성기업 / 장애인기업'},
+    {v:'social_eco',i:'🤝',l:'사회적경제기업'},
+    {v:'sobu',i:'⚙️',l:'소재·부품·장비 기업'},
+  ];
+  return card(`
+    ${badge('5단계 / 8 &nbsp;우대 조건')}
+    <span class="q-emoji">⭐</span>
+    <div class="q-title">이런 거 갖고 <em>계신가요?</em></div>
+    <div class="q-sub">있으면 우선 지원 & 금리 우대를 받을 수 있어요! 없어도 괜찮아요.</div>
+    <div class="multi-hint" id="multi-hint-specials">현재 <b>${D.specials.length}개</b> 선택됨</div>
+    <div class="opt-grid">${opts.map(o=>{const s=D.specials.includes(o.v);return`<div class="opt-card ${s?'sel':''}" onclick="togCard(this,'specials','${o.v}')"><span class="opt-icon">${o.i}</span><div class="opt-label">${o.l}</div></div>`;}).join('')}</div>
+    <div class="q-nav"><button class="btn-back" onclick="nav(-1)">← 이전</button><button class="btn-next" onclick="nav(1)">다음으로 →</button></div>
+  `);}
+
+/* ── S6: 정책자금 이력 ── */
+function s6(){
+  const bals=['없음','30억 미만','30억~60억','60억 초과'];
+  const cnts=['없음','1~2회','3회','4회 이상'];
+  const cums=['없음','25억 이하','25억 초과'];
+  return card(`
+    ${badge('6단계 / 8 &nbsp;정책자금 이력')}
+    <span class="q-emoji">📂</span>
+    <div class="q-title">이전에 <em>받아본 적</em> 있으신가요?</div>
+    <div class="q-sub">중진공 정책자금 수혜 이력을 알려주세요. 한도 계산에 반영됩니다.</div>
+    <div class="info-field"><label class="info-lbl">현재 중진공 정책자금 대출 잔액</label><div class="chip-row">${bals.map(v=>`<div class="chip ${D.bal===v?'sel':''}" data-key="bal" onclick="pick(this,'bal','${v}')">${v}</div>`).join('')}</div></div>
+    <div class="info-field"><label class="info-lbl">최근 5년 정책자금 수혜 횟수</label><div class="chip-row">${cnts.map(v=>`<div class="chip ${D.cnt===v?'sel':''}" data-key="cnt" onclick="pick(this,'cnt','${v}')">${v}</div>`).join('')}</div></div>
+    <div class="info-field"><label class="info-lbl">운전자금 누적 지원액 (중진공, 2018년 이후)</label><div class="chip-row">${cums.map(v=>`<div class="chip ${D.cum===v?'sel':''}" data-key="cum" onclick="pick(this,'cum','${v}')">${v}</div>`).join('')}</div></div>
+    <div class="q-nav"><button class="btn-back" onclick="nav(-1)">← 이전</button><button class="btn-next" onclick="nav(1)">다음으로 →</button></div>
+  `);}
+
+/* ── S7: 최종 확인 ── */
+function s7(){
+  return card(`
+    ${badge('7단계 / 8 &nbsp;최종 확인')}
+    <span class="q-emoji">✅</span>
+    <div class="q-title">마지막으로 <em>확인해 주세요</em></div>
+    <div class="q-sub">아래 항목을 체크하면 AI 분석이 시작됩니다</div>
+    <div class="info-field"><label class="info-lbl">세금 납부 현황</label><div class="chip-row"><div class="chip ${D.tax==='ok'?'sel':''}" data-key="tax" onclick="pick(this,'tax','ok')">✅ 정상 납부</div><div class="chip ${D.tax==='bad'?'sel':''}" data-key="tax" onclick="pick(this,'tax','bad')">⚠️ 국세·지방세 체납 중</div></div></div>
+    <div class="info-field"><label class="info-lbl">신용 상태</label><div class="chip-row"><div class="chip ${D.credit==='ok'?'sel':''}" data-key="credit" onclick="pick(this,'credit','ok')">✅ 정상</div><div class="chip ${D.credit==='bad'?'sel':''}" data-key="credit" onclick="pick(this,'credit','bad')">⚠️ 연체·부도 등 등록</div></div></div>
+    <div class="info-field"><label class="info-lbl">상장 여부</label><div class="chip-row"><div class="chip ${D.listed==='no'?'sel':''}" data-key="listed" onclick="pick(this,'listed','no')">비상장</div><div class="chip ${D.listed==='tech'?'sel':''}" data-key="listed" onclick="pick(this,'listed','tech')">코스닥 기술특례 (3년 이내)</div><div class="chip ${D.listed==='yes'?'sel':''}" data-key="listed" onclick="pick(this,'listed','yes')">유가증권·코스닥 일반상장</div></div></div>
+    <div class="info-field"><label class="info-lbl">소상공인 여부</label><div class="chip-row"><div class="chip ${D.soho==='no'?'sel':''}" data-key="soho" onclick="pick(this,'soho','no')">중소기업 (소상공인 아님)</div><div class="chip ${D.soho==='yes'?'sel':''}" data-key="soho" onclick="pick(this,'soho','yes')">소상공인 (소진공 자금 포함)</div><div class="chip ${D.soho==='mfg'?'sel':''}" data-key="soho" onclick="pick(this,'soho','mfg')">소상공인이지만 제조·혁신분야</div></div></div>
+    <div class="q-nav"><button class="btn-back" onclick="nav(-1)">← 이전</button><button class="btn-next" onclick="nav(1)">🤖 AI 분석 시작!</button></div>
+  `);}
+
+
+
+
+// 커스텀 드래그
+
+
+
+
+
+
+
+
+
+function validateAndStart(){
+  if(!D.company){alert('업체명을 입력해 주세요.');return;}
+  if(!D.email){alert('이메일을 입력해 주세요.');return;}
+  var emailReg=/^[a-zA-Z0-9._%+\-]+@[a-zA-Z0-9.\-]+\.[a-zA-Z]{2,}$/;
+  if(!emailReg.test(D.email)){alert('이메일 형식이 올바르지 않습니다.\n예: example@company.com');return;}
+  if(!D.c1){alert('개인정보 수집·이용 필수 동의가 필요합니다.');return;}
+  nav(1);
+}
+function pickAmt(el,key,val){
+  D[key]=val;
+  // 같은 그룹 버튼들 클래스 초기화
+  const group = el.closest('.amt-tick-row');
+  if(group){
+    group.querySelectorAll('.amt-tick-btn').forEach(b=>{
+      b.className='amt-tick-btn';
+    });
+    el.className = val===999 ? 'amt-tick-btn sel over' : 'amt-tick-btn sel';
+  }
+}
+function togArr(k,v){const i=D[k].indexOf(v);if(i>-1)D[k].splice(i,1);else D[k].push(v);}
+
+// Lightweight selection - only toggle CSS class, no re-render
+function pick(el,key,val,cls='sel'){
+  document.querySelectorAll('[data-key="'+key+'"]').forEach(e=>e.classList.remove('sel','sel-acc'));
+  el.classList.add(cls);
+  D[key]=val;
+}
+function togCard(el,key,val,cls='sel'){
+  const i=D[key].indexOf(val);
+  if(i>-1){D[key].splice(i,1);el.classList.remove(cls);}
+  else{D[key].push(val);el.classList.add(cls);}
+  // update hint
+  const hint=document.getElementById('multi-hint-'+key);
+  if(hint) hint.textContent=`현재 ${D[key].length}개 선택됨`;
+}
+
+/* ══ LOADING ══ */
+async function runDiag(){
+  goTo('scr-load');
+  document.getElementById('load-bar').style.width='0%';
+  const ids=['ls0','ls1','ls2','ls3','ls4'];
+  const pcts=[20,40,60,80,100];
+  for(let i=0;i<ids.length;i++){
+    await sl(i===4?1800:800);
+    const el=document.getElementById(ids[i]);
+    el.className='ls run';el.querySelector('.ls-badge').textContent='분석중...';
+    document.getElementById('load-bar').style.width=pcts[i]+'%';
+    await sl(600);
+    el.className='ls done';el.querySelector('.ls-badge').textContent='완료 ✓';
+  }
+  await sl(300);
+  const res=compute();
+  renderResult(res);
+  await sl(100);
+  goTo('scr-result');
+  streamAI(res);
+}
+function sl(ms){return new Promise(r=>setTimeout(r,ms));}
+
+/* ══ COMPUTE ══ */
+function compute(){
+  const s=D;
+  const sp=new Set(s.specials);
+  const pu=new Set(s.purposes);
+  const hasFac=pu.has('facility')||pu.has('land_build');
+  const hasWork=pu.has('working')||pu.has('export_mkt')||pu.has('emergency')||pu.has('recover')||pu.has('smart')||pu.has('green');
+
+  /* hard exclude */
+  const excl=[];
+  if(['realestate','financial','gamble'].includes(s.industry)) excl.push('선택 업종(부동산·금융·보험·사행업)은 정책자금 융자 제외 대상입니다.');
+  if(s.tax==='bad') excl.push('국세·지방세 체납 기업은 융자가 제한됩니다.');
+  if(s.credit==='bad') excl.push('연체·부도 등 신용 불량 정보 등록 기업은 융자가 제한됩니다.');
+  if(s.listed==='yes') excl.push('유가증권·코스닥 일반상장 기업은 우량기업 융자제한 대상입니다.');
+
+  /* 소재지 */
+  const isLocal=!['서울','경기도','인천'].includes(s.region);
+  const base=isLocal?70:60;
+  const balMap={'없음':0,'30억 미만':15,'30억~60억':45,'60억 초과':65};
+  const existBal=balMap[s.bal]||0;
+  const avail=Math.max(0,base-existBal);
+  const cumExc=s.cum==='25억 초과';
+
+  /* 업력 */
+  const ageMap={'1년 미만':'u3','1년~3년':'u3','3년~7년':'3to7','7년~15년':'7p','15년 이상':'15p'};
+  const ak=ageMap[s.age]||'3to7';
+  const isStart=ak==='u3'||ak==='3to7';
+  const isEst=ak==='7p'||ak==='15p';
+  const hasTech=sp.has('patent')||sp.has('gov_rd')||sp.has('venture');
+  const isYoung=s.ceo_age==='under39';
+  // 소상공인 자동 감지: 직접 선택 OR 업종이 소매·음식·서비스 OR 근로자 5인 미만
+  const sohoByWorkers = ['나 혼자(1인)','2~4명'].includes(s.workers);
+  const sohoByIndustry = s.industry === 'sohoretail';
+  const isSohoAuto = s.soho==='yes' || sohoByIndustry || sohoByWorkers;
+  const isSoho = isSohoAuto;
+  const isMfg = s.soho==='mfg' || (sohoByWorkers && ['manufacture','ict','bio','greentech'].includes(s.industry));
+  // 소상공인이지만 제조·혁신분야면 중진공 자금도 적용 가능
+  const isSohoOnly = isSoho && !['manufacture','ict','bio','greentech'].includes(s.industry);
+  const exp=s.export_val||'없음';
+
+  /* 금리 우대 */
+  let rd=0,rr=[];
+  if(sp.has('hire10')){rd+=.1;rr.push('고용증가 -0.1%p');}
+  if(sp.has('export_grow')){rd+=.1;rr.push('수출증가 -0.1%p');}
+  if(sp.has('revenue_grow')){rd+=.1;rr.push('매출증가 -0.1%p');}
+  if(sp.has('female')||sp.has('social_eco')){rd+=.1;rr.push('포용금융 -0.1%p');}
+  if(sp.has('unicorn')||sp.has('venture')){rd+=.1;rr.push('유망기업 -0.1%p');}
+  if(sp.has('sobu')){rd+=.1;rr.push('소부장 -0.1%p');}
+  if(hasFac){rd+=.3;rr.push('시설자금 -0.3%p');}
+  rd=Math.min(rd,.4);
+
+  const funds=[];
+
+  /* ─── A. 혁신창업사업화자금 ─── */
+  if(isStart||hasTech){
+    let sc=0,wy=[],ca=[],mf=0,mw=0,rate='기준금리 - 0.3%p (변동)';
+    if(ak==='u3'){sc+=35;wy.push('업력 3년 미만 창업기업 (핵심 지원 대상)');}
+    else if(ak==='3to7'){sc+=25;wy.push('업력 7년 미만 창업기업');}
+    if(hasTech){sc+=20;wy.push('기술 보유 기업 (특허·정부R&D·벤처인증)');}
+    if(isYoung&&ak==='u3'){
+      sc+=15;wy.push('청년전용창업자금 해당 (만39세 이하, 업력 3년 미만)');
+      rate='연 2.5% 고정금리';
+      ca.push('청년전용창업자금: 최대 1억원 (제조업·중점지원분야 2억원), 직접대출만 가능');
+    }
+    if(sp.has('unicorn')){sc+=10;wy.push('아기유니콘·예비유니콘 우선지원 대상');}
+    if(hasFac){sc+=8;mf=Math.min(avail,60);if(s.amt_f&&s.amt_f<999) mf=Math.min(mf,s.amt_f);}
+    if(hasWork&&!cumExc){
+      sc+=5;
+      let lim=isYoung&&ak==='u3'?(s.industry==='manufacture'?2:1):5;
+      if(s.amt_w&&s.amt_w<999) mw=Math.min(mw,s.amt_w);
+    }
+    if(cumExc){ca.push('운전자금 누적 25억 초과 → 운전자금 제한, 시설자금 신청 권장');mw=0;}
+    if(isSohoOnly){sc-=20;ca.push('소상공인 원칙적 제한 (제조업·혁신성장분야 예외 가능)');}
+    if(!hasFac&&!hasWork){mf=Math.min(avail,60);mw=cumExc?0:5;}
+    if(sc>0) funds.push({id:'startup',sc,name:'혁신창업사업화자금',cat:'중소벤처기업진흥공단(중진공)',desc:'기술력·사업성 우수한 벤처·스타트업 집중 육성',mf,mw,rate,rd:hasFac?Math.min(rd,.4):rd,rr,pf:'10년 (거치 4년 이내)',pw:'5년 (거치 2년 이내)',method:'직접대출 · 대리대출 · 투자조건부 융자',scale:'1조 6,058억원 (2026년)',apply:'https://www.kosmes.or.kr',wy,ca,tags:['창업·스타트업','기술사업화',(isYoung&&ak==='u3')?'청년전용':''].filter(Boolean)});
+  }
+
+  /* ─── B. 신성장기반자금 ─── */
+  if(isEst||sp.has('smart_factory')||sp.has('green_cert')||pu.has('smart')||pu.has('green')){
+    let sc=0,wy=[],ca=[],mf=0,mw=0,rate='기준금리 + 0.5%p (변동)',sub='혁신성장지원';
+    if(isEst){sc+=25;wy.push('업력 7년 이상 중소기업 (주요 지원 대상)');}
+    if(sp.has('smart_factory')||pu.has('smart')){sc+=22;wy.push('스마트공장 지원사업 참여·추진 기업');sub='제조현장스마트화';rate='기준금리 (변동)';ca.push('제조현장스마트화: 연간 100억 이내, 운전자금 연 10억 이내');}
+    if(sp.has('green_cert')||pu.has('green')){sc+=18;wy.push('녹색기술 인증·저탄소 친환경 전환 추진');sub='Net-Zero 유망기업';ca.push('그린분야 영위·저탄소 전환 입증 서류 필요');}
+    if(hasFac){sc+=10;wy.push('시설투자 목적 자금 (핵심 지원 용도)');mf=sub==='제조현장스마트화'?Math.min(avail,100):Math.min(avail,60);if(s.amt_f&&s.amt_f<999) mf=Math.min(mf,s.amt_f);}
+    if(s.industry==='manufacture'){sc+=5;wy.push('제조업 영위 기업');}
+    if(sp.has('sobu')){sc+=5;wy.push('소재·부품·장비 기업 우대');rate='기준금리 (변동)';}
+    if(hasWork&&!cumExc){let lim=sub==='제조현장스마트화'?10:5;if(s.amt_w&&s.amt_w<999) mw=Math.min(mw,s.amt_w);}
+    if(cumExc){ca.push('운전자금 누적 25억 초과 → 운전자금 제한');mw=0;}
+    if(!hasFac&&!hasWork){mf=Math.min(avail,60);mw=cumExc?0:5;}
+    if(sc>5) funds.push({id:'growth',sc,name:`신성장기반자금 (${sub})`,cat:'중소벤처기업진흥공단(중진공)',desc:'성장유망 중소기업의 생산성 향상·스마트화·탄소중립 지원',mf,mw,rate,rd,rr,pf:'10년 (거치 4년 이내)',pw:'5년 (거치 2년 이내)',method:'직접대출 · 대리대출 · 이차보전',scale:'1조 811억원 (2026년)',apply:'https://www.kosmes.or.kr',wy,ca,tags:[sub,'7년 이상',s.industry==='manufacture'?'제조업':''].filter(Boolean)});
+  }
+
+  /* ─── C. 신시장진출지원자금 ─── */
+  if(pu.has('export_mkt')||exp!=='없음'){
+    let sc=0,wy=[],ca=[],mf=0,mw=0,rate='기준금리 (변동)',sub='수출기업글로벌화';
+    if(exp==='없음'||exp==='10만달러 미만'){sc+=22;sub='내수기업수출기업화';wy.push('내수→수출 전환 지원 (수출 10만달러 미만)');ca.push('내수기업수출기업화: 운전자금만 가능, 연 10억 이내');mf=0;mw=s.amt_w?Math.min(10,s.amt_w):10;}
+    else if(exp==='10만~100만달러'){sc+=28;wy.push('수출 10만달러 이상 글로벌화 대상');mf=s.amt_f?Math.min(Math.min(avail,30),s.amt_f):Math.min(avail,30);mw=s.amt_w?Math.min(10,s.amt_w):10;}
+    else if(exp==='100만달러 이상'){sc+=33;wy.push('수출 100만달러 이상 고성장기업');let lim=sp.has('export_grow')?Math.min(avail,60):Math.min(avail,30);mf=s.amt_f?Math.min(lim,s.amt_f):lim;mw=s.amt_w?Math.min(10,s.amt_w):10;if(sp.has('export_grow'))ca.push('수출 고성장기업(3년 20%↑) 인정 시 연 60억 우대 적용 가능');}
+    if(isSoho||isMfg){sc+=5;wy.push('소상공인도 신청 가능 (전체 소상공인 포함)');}
+    if(pu.has('export_mkt')) sc+=10;
+    if(sc>10) funds.push({id:'export',sc,name:`신시장진출지원자금 (${sub})`,cat:'중소벤처기업진흥공단(중진공)',desc:'글로벌화 촉진·수출 인프라 조성 전용 융자',mf,mw,rate,rd:0,rr:[],pf:sub==='내수기업수출기업화'?'-':'10년 (거치 4년 이내)',pw:'5년 (거치 2년 이내)',method:'직접대출 · 이차보전',scale:'3,164억원 (2026년)',apply:'https://www.kosmes.or.kr',wy,ca,tags:[sub,'수출·글로벌',isSoho?'소상공인 가능':''].filter(Boolean)});
+  }
+
+  /* ─── D. 긴급경영안정자금 ─── */
+  const isEmg=sp.has('disaster')||sp.has('trade_barrier')||sp.has('partner_bankrupt')||sp.has('material_price')||pu.has('emergency');
+  if(isEmg){
+    let sc=40,wy=[],ca=[],mw=0,rate='기준금리 + 0.5%p (변동)';
+    if(sp.has('disaster')){sc+=20;wy.push('재해 피해 기업 - 재해확인증 필요 (재해중소기업지원)');rate='연 1.9% 고정금리';}
+    if(sp.has('trade_barrier')){sc+=15;wy.push('보호무역·환율 피해 기업 (융자제한 ①항 예외 적용)');}
+    if(sp.has('partner_bankrupt')){sc+=15;wy.push('주요 거래처 도산으로 인한 경영애로');}
+    if(sp.has('material_price')){sc+=10;wy.push('원자재 가격급등 피해 기업 (경영애로 규모 요건 예외)');}
+    ca.push('매출액 또는 영업이익 10% 이상 감소 증빙 필요 (비교 시점 다양하게 인정)');
+    ca.push('운전자금만 지원 (시설자금 없음) · 연 10억 / 3년간 15억 이내');
+    ca.push('경영애로 발생 후 6개월 이내 신청 (산업구조조정 업종은 1년)');
+    mw=s.amt_w?Math.min(10,s.amt_w):10;
+    funds.push({id:'emg',sc,name:'긴급경영안정자금 (일시적경영애로)',cat:'중소벤처기업진흥공단(중진공)',desc:'재해·일시적 경영애로 기업 긴급 운전자금 지원',mf:0,mw,rate,rd:0,rr:[],pf:'-',pw:'5년 (거치 2년 이내)',method:'직접대출',scale:'2,500억원 (2026년)',apply:'https://www.kosmes.or.kr',wy,ca,tags:['긴급자금','경영애로','직접대출']});
+  }
+
+  /* ─── E. 재도약지원자금 ─── */
+  if(sp.has('restructure')||sp.has('refound')||pu.has('recover')){
+    let sc=35,wy=[],ca=[],mf=0,mw=0,sub='사업전환자금',rate='기준금리 (변동)';
+    if(sp.has('restructure')){sc+=20;wy.push('사업전환촉진법에 따른 사업전환계획 승인기업');sub='사업전환자금';mf=hasFac?Math.min(100,s.amt_f||100):0;ca.push('통상변화대응지원기업: 2% 고정금리 적용');}
+    if(sp.has('refound')){sc+=20;wy.push('폐업 이력 보유 재창업 기업 (업력 7년 미만)');sub='재창업자금';mf=hasFac?Math.min(Math.min(avail,60),s.amt_f||60):0;ca.push('재창업자금: 성실경영평가 필수 통과');}
+    mw=hasWork?Math.min(5,s.amt_w||5):0;
+    ca.push('운전자금 연 5억 이내 (성실경영 심층평가 통과 시 10억)');
+    funds.push({id:'recover',sc,name:`재도약지원자금 (${sub})`,cat:'중소벤처기업진흥공단(중진공)',desc:'사업전환·구조조정·재창업으로 경영정상화 및 재도약 지원',mf,mw,rate,rd:0,rr:[],pf:'10년 (거치 4~5년 이내)',pw:'6년 (거치 3년 이내)',method:'직접대출',scale:'6,125억원 (2026년)',apply:'https://www.kosmes.or.kr',wy,ca,tags:[sub,'재도약']});
+  }
+
+  /* ─── F. 신용보증기금 ─── */
+  if(!isSohoOnly){
+    let sc=15,wy=['신용보증기금 보증서를 통한 대출 지원 (담보 부족 기업 대상)'],ca=[],mf=0,mw=0;
+    ca.push('기업당 보증한도 30억원 (우량·혁신기업은 최대 200억원까지 가능)');
+    ca.push('BBB등급 이상 신용평가 기업·상장기업은 보증 제한');
+    if(hasFac){mf=Math.min(30,s.amt_f||30);}
+    if(hasWork){mw=Math.min(30,s.amt_w||30);}
+    if(!hasFac&&!hasWork){mf=20;mw=10;}
+    if(hasTech){sc+=5;wy.push('기술력 우수기업 우대 보증 가능');}
+    funds.push({id:'sinbo',sc,name:'신용보증기금 신용보증',cat:'신용보증기금(신보)',desc:'담보력 부족 중소기업의 금융기관 대출에 신용보증 지원',mf,mw,rate:'은행 여신금리 적용 (보증료 별도)',rd:0,rr:[],pf:'10년 이내',pw:'5년 이내',method:'금융기관 대출 + 신보 보증서',scale:'보증공급 63.9조원 운용 (2026년)',apply:'https://www.kodit.or.kr',wy,ca,tags:['신용보증','담보 부족','대출 지원']});
+  }
+
+  /* ─── G. 기술보증기금 ─── */
+  if(hasTech||sp.has('venture')||sp.has('patent')||sp.has('gov_rd')){
+    let sc=20,wy=['기술력 기반 보증 지원 (기술사업타당성 평가)'],ca=[];
+    ca.push('기술보증기금 기술사업타당성평가 통과 필요');
+    ca.push('기보·신보·재단 사고기업, 빈번한 연체기업 제외');
+    const mf2=hasFac?Math.min(avail,50):0;
+    const mw2=hasWork?Math.min(20,s.amt_w||20):0;
+    if(sp.has('venture')){sc+=8;wy.push('벤처기업 인증 우대 지원');}
+    if(sp.has('gov_rd')){sc+=8;wy.push('정부 R&D 완료 기업 기술사업화 보증');}
+    if(isStart){sc+=5;wy.push('창업 초기기업 기술 중심 평가');}
+    funds.push({id:'kibo',sc,name:'기술보증기금 기술보증',cat:'기술보증기금(기보)',desc:'기술력 우수 신기술사업자 대출 보증 지원',mf:mf2,mw:mw2,rate:'은행 여신금리 적용 (기술보증료 별도)',rd:0,rr:[],pf:'10년 이내',pw:'5년 이내',method:'금융기관 대출 + 기보 기술보증서',scale:'보증잔액 29.5조원 운용 (2026년)',apply:'https://www.kibo.or.kr',wy,ca,tags:['기술보증','기술력 평가','R&D·특허']});
+  }
+
+  /* ─── H. 지역신용보증재단 ─── */
+  if(isSoho||isMfg){
+    let sc=30,wy=['소기업·소상공인 보증 전문기관'],ca=[];
+    ca.push('기업당 최대 8억원 이내 (신보·기보 기 보증금액 포함)');
+    ca.push('운전자금: 매출액의 1/4~1/6 이내 / 시설자금: 소요자금 범위 내');
+    const mf2=hasFac?Math.min(8,s.amt_f||8):0;
+    const mw2=hasWork?Math.min(8,s.amt_w||8):0;
+    funds.push({id:'jiboshin',sc,name:'지역신용보증재단 보증',cat:'지역신용보증재단',desc:'담보력 부족 소기업·소상공인 대출 보증 지원',mf:mf2,mw:mw2,rate:'은행 여신금리 (보증료 별도)',rd:0,rr:[],pf:'5년 이내 (거치 2년)',pw:'5년 이내 (거치 2년)',method:'사업장 소재지 지역신용보증재단 방문',scale:'보증공급 26조원 계획 (2026년)',apply:'https://www.koreg.or.kr',wy,ca,tags:['소상공인','지역보증','8억 이내']});
+  }
+
+  /* ─── I. 소상공인 일반경영안정자금 ─── */
+  if(isSoho){
+    let sc=40,wy=['소상공인기본법상 소상공인 (업력 무관)'],ca=[];
+    ca.push('대출한도: 7,000만원');
+    ca.push('대리대출 방식 (금융기관을 통해 실행)');
+    ca.push('소상공인 정책자금 지원제외 업종 해당 시 신청 불가');
+    funds.push({id:'soho_gen',sc,name:'소상공인 일반경영안정자금',cat:'소상공인시장진흥공단(소진공)',desc:'일반 소상공인 경영안정 및 자생력 강화 운전자금 지원',mf:0,mw:Math.min(.7,s.amt_w||.7),rate:'기준금리 + 0.6%p (변동)',rd:0,rr:[],pf:'-',pw:'5년 (거치 2년 이내)',method:'소상공인정책자금 홈페이지 온라인 신청 → 대리대출',scale:'별도 공고',apply:'https://ols.semas.or.kr',wy,ca,tags:['소상공인','운전자금','7천만원',(sohoByIndustry?'업종 자동감지':(sohoByWorkers?'규모 자동감지':''))].filter(Boolean)});
+  }
+
+  /* ─── J. 소상공인 특별경영안정자금 (긴급) ─── */
+  if(isSoho&&isEmg){
+    let sc=50,wy=['소상공인 경영애로·재해 긴급 지원'],ca=[];
+    if(sp.has('disaster')){wy.push('재해확인증 발급 소상공인 (2.0% 고정금리)');ca.push('재해 피해 한도: 1억원 / 경영애로 한도: 7,000만원');}
+    else{ca.push('일시적 경영애로: 매출 15% 이상 감소 증빙 필요');}
+    funds.push({id:'soho_emg',sc,name:'소상공인 특별경영안정자금 (긴급)',cat:'소상공인시장진흥공단(소진공)',desc:'재난·경영애로 소상공인 경영안정 긴급 지원',mf:0,mw:Math.min(sp.has('disaster')?1:.7,s.amt_w||1),rate:sp.has('disaster')?'연 2.0% 고정':'기준금리 (변동)',rd:0,rr:[],pf:'-',pw:'5년 (거치 2년 이내)',method:'직접대출 · 대리대출',scale:'별도 공고',apply:'https://ols.semas.or.kr',wy,ca,tags:['소상공인','긴급자금']});
+  }
+
+  /* ─── K. 소상공인 성장기반자금 ─── */
+  if(isSoho&&(sp.has('smart_factory')||sp.has('venture')||exp!=='없음'||sohoByIndustry||sohoByWorkers)){
+    let sc=35,wy=[],ca=[],mf=0,mw=0;
+    if(sp.has('smart_factory')){wy.push('스마트기술 도입 소상공인');}
+    if(exp!=='없음'){wy.push('수출 소상공인 (혁신성장촉진자금 대상)');}
+    if(sp.has('venture')){wy.push('혁신·벤처 소상공인 우대');}
+    ca.push('혁신형: 운전 2억 / 시설 10억 이내');
+    ca.push('일반형: 운전 1억 / 시설 5억 이내');
+    mf=hasFac?Math.min(5,s.amt_f||5):0;mw=hasWork?Math.min(2,s.amt_w||2):0;
+    funds.push({id:'soho_grow',sc,name:'소상공인 성장기반자금 (혁신성장촉진)',cat:'소상공인시장진흥공단(소진공)',desc:'혁신·수출·스마트화 소상공인의 성장 자금 지원',mf,mw,rate:'기준금리 + 0.4%p (변동)',rd:0,rr:[],pf:'8년 (거치 3년 이내)',pw:'5년 (거치 2년 이내)',method:'직접대출 · 대리대출',scale:'별도 공고',apply:'https://ols.semas.or.kr',wy,ca,tags:['소상공인','성장·혁신']});
+  }
+
+  /* ─── L. KITA 무역진흥자금 ─── */
+  if((exp!=='없음'||pu.has('export_mkt'))&&!isSohoOnly){
+    let sc=12,wy=['한국무역협회 회원사 수출 마케팅·이행 자금'],ca=[];
+    ca.push('전년도 수출실적 2,000만 달러 이하 & 한국무역협회 회비 완납 필요');
+    ca.push('융자한도: 최고 3억원 / 금리: 연 2.5~3.0% 고정');
+    ca.push('신청기간: 매년 4~11월 월초(1~10일)');
+    funds.push({id:'kita',sc,name:'KITA 무역진흥자금 융자',cat:'한국무역협회(KITA)',desc:'수출중소기업의 수출 마케팅·이행 자금을 저리 융자 지원',mf:0,mw:Math.min(.3,s.amt_w||.3),rate:'연 2.5~3.0% 고정금리 (회비납부 연차별)',rd:0,rr:[],pf:'-',pw:'3년 (거치 2년 후 4회 분할상환)',method:'무역진흥자금 홈페이지 온라인 신청 → 은행 실행',scale:'별도 운용',apply:'https://membership.kita.net',wy,ca,tags:['수출지원','KITA 회원','3억 이내']});
+  }
+
+  /* 정렬 & 상위 3개 */
+  funds.sort((a,b)=>b.sc-a.sc);
+  const top=funds.slice(0,3);
+  const totalMaxRaw=top.reduce((s,f)=>{
+    const f_amt=hasFac?f.mf:0;
+    const w_amt=hasWork?f.mw:0;
+    return s+Math.max(f_amt,0)+Math.max(w_amt,0);
+  },0);
+  const totalMax = Math.round(totalMaxRaw * 10000) / 10000;
+
+  return{funds:top,excl,avail,isLocal,rd,rr,totalMax,hasFac,hasWork,cumExc};
+}
+
+/* ══ RENDER RESULT ══ */
+function fmt(v){
+  if(!v||v<=0) return '-';
+  if(v>=999) return '5억 초과';
+  // 부동소수점 정리
+  v = Math.round(v * 10000) / 10000;
+  if(v >= 1){
+    const uk = Math.floor(v);
+    const cm = Math.round((v - uk) * 10); // 천만원 단위
+    if(cm > 0) return uk + '억 ' + cm + '천만원';
+    return uk + '억원';
+  }
+  return Math.round(v * 10000).toLocaleString() + '만원';
+}
+
+function renderResult(res){
+  const company=D.company||'귀사';
+  document.getElementById('r-title').textContent=`${company} 맞춤 정책자금 진단 결과`;
+  document.getElementById('r-kpis').innerHTML=`
+    <div class="r-kpi"><div class="r-kpi-n">${res.funds.length}개</div><div class="r-kpi-l">추천 자금 상품</div></div>
+    <div class="r-kpi"><div class="r-kpi-n">${fmt(res.totalMax)}</div><div class="r-kpi-l">최대 수령 가능 합계</div></div>
+    <div class="r-kpi"><div class="r-kpi-n">${res.rd>0?'-'+res.rd.toFixed(1)+'%p':'기본금리'}</div><div class="r-kpi-l">금리 우대 폭</div></div>
+  `;
+
+  let warnHtml='';
+  if(res.excl.length) warnHtml=`<div class="warn-card"><h3>⚠️ 융자 제한 사항</h3><p>${res.excl.map(e=>'• '+e).join('<br>')}<br><br>위 사항이 해소되어야 정책자금 신청이 가능합니다. 중진공 ☎ 1811-3655에 문의하세요.</p></div>`;
+  document.getElementById('r-warn').innerHTML=warnHtml;
+  document.getElementById('ai-txt').innerHTML='<span class="cursor"></span>';
+
+  const rankCls=['rk-g','rk-s','rk-b'];
+  const rankIco=['🥇','🥈','🥉'];
+  let html='';
+  res.funds.forEach((f,i)=>{
+    // 목적에 따라 한도 표시
+    const showF=res.hasFac&&f.mf>0;
+    const showW=res.hasWork&&f.mw>0;
+    const displayTotal=(showF?f.mf:0)+(showW?f.mw:0)||(f.mf+f.mw);
+    let rateDisp=f.rate;
+    if(f.rd>0&&!f.rate.includes('고정')&&!f.rate.includes('은행')) rateDisp+=` (우대 -${f.rd.toFixed(1)}%p 가능)`;
+    html+=`
+    <div class="r-fund">
+      <div class="r-fund-top">
+        <div class="r-rank ${rankCls[i]}">${rankIco[i]}</div>
+        <div class="r-fund-info">
+          <div class="r-cat">${f.cat}</div>
+          <div class="r-name">${f.name}</div>
+          <div class="r-desc">${f.desc}</div>
+        </div>
+        <div class="r-amt-box">
+          <div class="r-amt-n">${fmt(displayTotal||f.mf||f.mw)}</div>
+          <div class="r-amt-l">예상 한도</div>
+        </div>
+      </div>
+      <div class="r-fund-body">
+        <div class="r-grid">
+          <div><div class="r-il">시설자금 한도</div><div class="r-iv blue">${showF?fmt(f.mf):'-'}</div></div>
+          <div><div class="r-il">운전자금 한도</div><div class="r-iv blue">${showW?fmt(f.mw):'-'}</div></div>
+          <div><div class="r-il">금리</div><div class="r-iv" style="font-size:11px;">${rateDisp}</div></div>
+          <div><div class="r-il">시설자금 대출기간</div><div class="r-iv" style="font-size:11px;">${f.pf}</div></div>
+          <div><div class="r-il">운전자금 대출기간</div><div class="r-iv" style="font-size:11px;">${f.pw}</div></div>
+          <div><div class="r-il">2026년 규모</div><div class="r-iv" style="font-size:11px;">${f.scale}</div></div>
+        </div>
+        <div class="r-tags">
+          ${f.tags.map(t=>`<span class="r-tag t-b">${t}</span>`).join('')}
+          ${f.rr.map(r=>`<span class="r-tag t-g">${r}</span>`).join('')}
+        </div>
+        <div class="r-why"><div class="r-why-l">추천 이유</div><ul>${f.wy.map(w=>`<li>${w}</li>`).join('')}</ul></div>
+        ${f.ca.length?`<div class="r-caution">⚠️ ${f.ca.join(' · ')}</div>`:''}
+        <div class="r-actions">
+          <a href="${f.apply}" target="_blank" class="r-apply">신청하기 →</a>
+          <button class="r-toggle" onclick="togDetail(${i})">상세보기 ▾</button>
+        </div>
+      </div>
+      <div class="fund-detail" id="fd${i}">
+        <div class="fd-title">융자 방식</div>
+        <div class="fd-txt">${f.method}</div>
+      </div>
+    </div>`;
+  });
+  if(!res.funds.length) html=`<div class="warn-card"><h3>매칭 자금 없음</h3><p>입력 조건으로 추천 가능한 자금이 없습니다. 조건을 재확인하거나 중진공(1811-3655)에 문의하세요.</p></div>`;
+  document.getElementById('r-funds').innerHTML=html;
+}
+
+function togDetail(i){
+  const d=document.getElementById('fd'+i);
+  const b=d.previousElementSibling.querySelector('.r-toggle');
+  const o=d.classList.toggle('open');
+  b.textContent=o?'상세보기 ▴':'상세보기 ▾';
+}
+
+/* ══ AI STREAM ══ */
+async function streamAI(res){
+  const el=document.getElementById('ai-txt');
+  const company=D.company||'귀사';
+  const indMap={manufacture:'제조업',ict:'IT·소프트웨어',bio:'바이오·헬스케어',greentech:'그린·친환경',knowledge:'지식서비스업',sohoretail:'소매·음식·서비스',export_trade:'수출·무역',other:'기타업종'};
+  const industry=indMap[D.industry]||D.industry||'업종 미입력';
+  const top=res.funds[0];
+  const topAmt=top?((res.hasFac?top.mf:0)+(res.hasWork?top.mw:0)):0;
+  const prompt=`당신은 2026년 중소벤처기업부 정책자금 전문 컨설턴트입니다. 아래 기업 정보를 기반으로 맞춤형 AI 진단 코멘트를 2~3 문단으로 작성하세요. 친근하고 전문적인 톤으로 핵심을 짚어주세요.
+
+기업 정보:
+- 업체명: ${company}
+- 업종: ${industry}
+- 업력: ${D.age||'미입력'}
+- 소재지: ${D.region||'미입력'}
+- 자금목적: ${D.purposes.join(', ')||'미선택'}
+- 수출실적: ${D.export_val||'없음'}
+- 특수사항: ${D.specials.join(', ')||'없음'}
+- 잔여한도: ${res.avail}억원 (${res.isLocal?'지방':'수도권'})
+- 1순위 추천: ${top?.name||'없음'} (예상 ${fmt(topAmt)})
+- 융자제한: ${res.excl.length?res.excl.join('; '):'없음'}
+- 금리우대: ${res.rd>0?'-'+res.rd.toFixed(1)+'%p 가능':'없음'}
+
+포함 내용:
+1. 기업 현황 총평 (업종·업력 기반)
+2. 1순위 추천 자금 이유 및 신청 전략
+3. 금리 우대 방법 또는 추가 조언
+
+한국어로 plain text만 작성 (마크다운 없이).`;
+
+  try{
+    const resp=await fetch('/api/claude',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({prompt:prompt})});
+    if(!resp.ok)throw new Error('err');
+    const data=await resp.json();
+    const txt=data.content||'';
+    el.innerHTML='';
+    let i=0;
+    const iv=setInterval(()=>{
+      if(i<txt.length){el.innerHTML=txt.slice(0,i+3).replace(/\n/g,'<br>')+'<span class="cursor"></span>';i+=3;}
+      else{el.innerHTML=txt.replace(/\n/g,'<br>');clearInterval(iv);}
+    },16);
+  }catch(e){
+    const fb=fallback(res,company,industry,top,topAmt);
+    el.innerHTML='';let i=0;
+    const iv=setInterval(()=>{if(i<fb.length){el.innerHTML=fb.slice(0,i+1).replace(/\n/g,'<br>')+'<span class="cursor"></span>';i++;}else{el.innerHTML=fb.replace(/\n/g,'<br>');clearInterval(iv);}},16);
+  }
+}
+
+function fallback(res,company,industry,top,topAmt){
+  const warn=res.excl.length?`\n\n⚠️ 융자 제한: ${res.excl[0]}`:'';
+  const rd=res.rd>0?`금리 우대 조건(최대 -${res.rd.toFixed(1)}%p)을 충족하여 이자 부담을 줄일 수 있습니다. `:'';
+  return `${company}은(는) ${D.region||'소재지 미입력'} 소재 ${industry} 기업으로, 업력 ${D.age||'미입력'} 기준 2026년도 중소기업 정책자금 지원 대상에 해당합니다. ${res.isLocal?'지방 소재 기업으로 기업당 최대 70억원':'수도권 소재 기업으로 기업당 최대 60억원'}의 융자 한도가 적용되며, 현재 잔여 가용 한도는 ${res.avail}억원입니다.\n\n최우선 추천 자금은 <${top?.name||'해당 없음'}>으로, 예상 수령 가능 한도는 ${fmt(topAmt)}입니다. ${rd}중소벤처기업진흥공단(kosmes.or.kr) 또는 해당 기관 온라인 시스템을 통해 신청하시기 바랍니다.\n\n정책자금 신청 시 기업 신용등급, 사업계획의 타당성, 기술성·사업성 평가 결과에 따라 실제 대출 금액이 달라질 수 있습니다. 전담 콜센터(1811-3655)를 통해 사전 상담을 받으시면 선정 가능성을 높이는 데 도움이 됩니다.${warn}`;
+}
+
+function resetAll(){
+  Object.assign(D,{company:'',phone:'',email:'',c1:true,c2:true,industry:'',revenue:'',age:'',workers:'',region:'',ceo_age:'over40',purposes:[],export_val:'없음',amt_f:0,amt_w:0,amt_f_uk:0,amt_f_cm:0,amt_w_uk:0,amt_w_cm:0,specials:[],bal:'없음',cnt:'없음',cum:'없음',tax:'ok',credit:'ok',listed:'no',soho:'no'});
+  step=0;
+  goTo('scr-land');
+}
+</script>
+</body>
+</html>
