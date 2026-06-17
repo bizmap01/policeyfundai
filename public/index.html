@@ -410,7 +410,7 @@ function s0(){return card(`
   <div class="info-field"><label class="info-lbl">이메일 <span class="req">*</span></label><input class="info-input" placeholder="example@company.com" value="${D.email}" oninput="D.email=this.value"></div>
   <div class="consent-box"><b>개인정보 수집·이용 안내</b><br>수집항목: 업체명, 전화번호, 이메일 / 수집목적: 정책자금 진단 결과 제공 / 보유기간: 서비스 이용 종료 후 1년 / 제3자 제공: 없음</div>
   <label class="consent-chk"><input type="checkbox" onchange="D.c1=this.checked" ${D.c1?'checked':''}><span><span class="req">[필수]</span> 개인정보 수집·이용에 동의합니다</span></label>
-  <label class="consent-chk"><input type="checkbox" onchange="D.c2=this.checked" ${D.c2?'checked':''}><span>[선택] 마케팅·서비스 안내 수신에 동의합니다</span></label>
+  <label class="consent-chk"><input type="checkbox" onchange="D.c2=this.checked;console.log('c2:',D.c2)" ${D.c2?'checked':''}><span>[선택] 마케팅·서비스 안내 수신에 동의합니다</span></label>
   <div class="q-nav"><button class="btn-next" onclick="validateAndStart()">AI 분석 시작! →</button></div>
   <div class="secure-note">🔒 입력하신 정보는 암호화되어 안전하게 보관됩니다</div>
 `);}
