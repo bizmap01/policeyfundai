@@ -738,10 +738,12 @@ function compute(){
     if(hasWork&&!cumExc){
       sc+=5;
       let lim=isYoung&&ak==='u3'?(s.industry==='manufacture'?2:1):5;
-      if(s.amt_w&&s.amt_w<999) mw=Math.min(mw,s.amt_w);
+      mw=lim;
+      if(s.amt_w&&s.amt_w<999) mw=Math.min(lim,s.amt_w);
     }
     if(cumExc){ca.push('운전자금 누적 25억 초과 → 운전자금 제한, 시설자금 신청 권장');mw=0;}
     if(isSohoOnly){sc-=20;ca.push('소상공인 원칙적 제한 (제조업·혁신성장분야 예외 가능)');}
+    // 자금목적 미선택시 기본 한도 표시
     if(!hasFac&&!hasWork){mf=Math.min(avail,60);mw=cumExc?0:5;}
     if(sc>0) funds.push({id:'startup',sc,name:'혁신창업사업화자금',cat:'중소벤처기업진흥공단(중진공)',desc:'기술력·사업성 우수한 벤처·스타트업 집중 육성',mf,mw,rate,rd:hasFac?Math.min(rd,.4):rd,rr,pf:'10년 (거치 4년 이내)',pw:'5년 (거치 2년 이내)',method:'직접대출 · 대리대출 · 투자조건부 융자',scale:'1조 6,058억원 (2026년)',apply:'https://www.kosmes.or.kr',wy,ca,tags:['창업·스타트업','기술사업화',(isYoung&&ak==='u3')?'청년전용':''].filter(Boolean)});
   }
@@ -755,7 +757,7 @@ function compute(){
     if(hasFac){sc+=10;wy.push('시설투자 목적 자금 (핵심 지원 용도)');mf=sub==='제조현장스마트화'?Math.min(avail,100):Math.min(avail,60);if(s.amt_f&&s.amt_f<999) mf=Math.min(mf,s.amt_f);}
     if(s.industry==='manufacture'){sc+=5;wy.push('제조업 영위 기업');}
     if(sp.has('sobu')){sc+=5;wy.push('소재·부품·장비 기업 우대');rate='기준금리 (변동)';}
-    if(hasWork&&!cumExc){let lim=sub==='제조현장스마트화'?10:5;if(s.amt_w&&s.amt_w<999) mw=Math.min(mw,s.amt_w);}
+    if(hasWork&&!cumExc){let lim=sub==='제조현장스마트화'?10:5;mw=lim;if(s.amt_w&&s.amt_w<999) mw=Math.min(lim,s.amt_w);}
     if(cumExc){ca.push('운전자금 누적 25억 초과 → 운전자금 제한');mw=0;}
     if(!hasFac&&!hasWork){mf=Math.min(avail,60);mw=cumExc?0:5;}
     if(sc>5) funds.push({id:'growth',sc,name:`신성장기반자금 (${sub})`,cat:'중소벤처기업진흥공단(중진공)',desc:'성장유망 중소기업의 생산성 향상·스마트화·탄소중립 지원',mf,mw,rate,rd,rr,pf:'10년 (거치 4년 이내)',pw:'5년 (거치 2년 이내)',method:'직접대출 · 대리대출 · 이차보전',scale:'1조 811억원 (2026년)',apply:'https://www.kosmes.or.kr',wy,ca,tags:[sub,'7년 이상',s.industry==='manufacture'?'제조업':''].filter(Boolean)});
@@ -917,9 +919,9 @@ function renderResult(res){
   let html='';
   res.funds.forEach((f,i)=>{
     // 목적에 따라 한도 표시
-    const showF=res.hasFac&&f.mf>0;
-    const showW=res.hasWork&&f.mw>0;
-    const displayTotal=(showF?f.mf:0)+(showW?f.mw:0)||(f.mf+f.mw);
+    const showF=f.mf>0;
+    const showW=f.mw>0;
+    const displayTotal=(f.mf||0)+(f.mw||0);
     let rateDisp=f.rate;
     if(f.rd>0&&!f.rate.includes('고정')&&!f.rate.includes('은행')) rateDisp+=` (우대 -${f.rd.toFixed(1)}%p 가능)`;
     html+=`
@@ -938,8 +940,8 @@ function renderResult(res){
       </div>
       <div class="r-fund-body">
         <div class="r-grid">
-          <div><div class="r-il">시설자금 한도</div><div class="r-iv blue">${showF?fmt(f.mf):'-'}</div></div>
-          <div><div class="r-il">운전자금 한도</div><div class="r-iv blue">${showW?fmt(f.mw):'-'}</div></div>
+          <div><div class="r-il">시설자금 한도</div><div class="r-iv blue">${fmt(f.mf)}</div></div>
+          <div><div class="r-il">운전자금 한도</div><div class="r-iv blue">${fmt(f.mw)}</div></div>
           <div><div class="r-il">금리</div><div class="r-iv" style="font-size:11px;">${rateDisp}</div></div>
           <div><div class="r-il">시설자금 대출기간</div><div class="r-iv" style="font-size:11px;">${f.pf}</div></div>
           <div><div class="r-il">운전자금 대출기간</div><div class="r-iv" style="font-size:11px;">${f.pw}</div></div>
